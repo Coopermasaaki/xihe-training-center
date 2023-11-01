@@ -23,11 +23,14 @@ func newHelper(cfg *Config) (*helper, error) {
 	}
 
 	suc := &cfg.SyncAndUpload
+	args := []string{suc.OBSUtilPath, "config", "-interactive"}
 
-	_, err, _ = libutils.RunCmd(
-		suc.OBSUtilPath, "config",
-		"-i="+obsCfg.AccessKey, "-k="+obsCfg.SecretKey, "-e="+obsCfg.Endpoint,
+	input := fmt.Sprintf(
+		"%s\n%s\n%s\n\n",
+		obsCfg.AccessKey, obsCfg.SecretKey, obsCfg.Endpoint,
 	)
+
+	_, err = utils.RunCmdInput(input, args...)
 	if err != nil {
 		return nil, fmt.Errorf("obsutil config failed, err:%s", err.Error())
 	}
