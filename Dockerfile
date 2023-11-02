@@ -16,7 +16,9 @@ FROM openeuler/openeuler:22.03
 RUN dnf -y update && \
     dnf in -y shadow git bash && \
     groupadd -g 5000 mindspore && \
-    useradd -u 5000 -g mindspore -s /bin/bash -m mindspore
+    useradd -u 5000 -g mindspore -s /bin/bash -m mindspore && \
+    echo "umask 027" >> /etc/bash.bashrc && \
+    rm -rf /tmp/*
 
 USER mindspore
 WORKDIR /opt/app
